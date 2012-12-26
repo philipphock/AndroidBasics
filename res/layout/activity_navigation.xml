@@ -15,4 +15,26 @@
         android:text="Sensors" 
         />
 
+    <Button
+        android:id="@+id/touch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/nav_sensors"
+        android:layout_alignRight="@+id/nav_sensors"
+        android:layout_below="@+id/nav_sensors"
+        android:layout_marginTop="17dp"
+        android:onClick="onClick"
+        android:text="touch" />
+
+    <Button
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/touch"
+        android:layout_alignRight="@+id/touch"
+        android:layout_below="@+id/touch"
+        android:layout_marginTop="30dp"
+        android:onClick="onClick"
+        android:text="location" />
+
 </RelativeLayout>

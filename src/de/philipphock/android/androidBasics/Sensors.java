@@ -4,6 +4,12 @@ import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.pm.LabeledIntent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -11,6 +17,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,7 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class Sensors extends FragmentActivity implements ActionBar.TabListener {
+public class Sensors extends FragmentActivity implements ActionBar.TabListener,SensorEventListener {
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -31,9 +38,14 @@ public class Sensors extends FragmentActivity implements ActionBar.TabListener {
 	 */
 	SectionsPagerAdapter mSectionsPagerAdapter;
 
-	private enum NAV {
-		ACCELEROMETER,MAGNETOMETER,PROXYMITY,BRIGHTNESS,GYROSCOPE;
-	}
+	private SensorManager mSensorManager;
+	
+	public static final int NUM_SENSORS= 5;
+	public static final int ACCELEROMETER = 0;
+	public static final int MAGNETOMETER = 1;
+	public static final int PROXIMITY = 2;
+	public static final int BRIGHTNESS = 3;
+	public static final int GYROSCOPE = 4;
 	/**
 	 * The {@link ViewPager} that will host the section contents.
 	 */
@@ -78,6 +90,7 @@ public class Sensors extends FragmentActivity implements ActionBar.TabListener {
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
+		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 	}
 
 	@Override
@@ -128,16 +141,24 @@ public class Sensors extends FragmentActivity implements ActionBar.TabListener {
 //			fragment.setArguments(args);
 //			return fragment;
 			
+
+			switch(position){
+				case ACCELEROMETER: return new AccelerometerFragment();
+				case MAGNETOMETER: return new MagnetometerFragment();
+				case PROXIMITY: return new ProximityFragment();
+				case BRIGHTNESS: return new BrightnessFragment();
+				case GYROSCOPE: return new GyroscopeFragment();
+			}
 			
-			
-			
+			//should never be called
 			return new AccelerometerFragment();
+			
 			
 		}
 
 		@Override
 		public int getCount() {
-			return 5;
+			return NUM_SENSORS;
 		}
 		@Override
 		public CharSequence getPageTitle(int position) {
@@ -153,33 +174,88 @@ public class Sensors extends FragmentActivity implements ActionBar.TabListener {
 		}
 	}
 
-	/**
-	 * A dummy fragment representing a section of the app, but that simply
-	 * displays dummy text.
-	 */
-	public static class DummySectionFragment extends Fragment {
-		/**
-		 * The fragment argument representing the section number for this
-		 * fragment.
-		 */
-		public static final String ARG_SECTION_NUMBER = "section_number";
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		
+		
+	}
 
-		public DummySectionFragment() {
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		
+		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+		      accelerometer(event);
 		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			// Create a new TextView and set its text to the fragment's section
-			// number argument value.
-			TextView textView = new TextView(getActivity());
-			textView.setGravity(Gravity.CENTER);
-			textView.setText(Integer.toString(getArguments().getInt(
-					ARG_SECTION_NUMBER)));
-			return textView;
-		}
+		
+		
 	}
 	
+	
+private void accelerometer(SensorEvent event) {
+	float[] values = event.values;
+	
+	float x = values[0];
+	float y = values[1];
+	float z = values[2];
+	
+	TextView v_x = (TextView)findViewById(R.id.accel_val_x);
+	TextView v_y = (TextView)findViewById(R.id.accel_val_y);
+	TextView v_z = (TextView)findViewById(R.id.accel_val_z);
+	
+	if (	(v_x == null) ||
+			(v_y == null) ||
+			(v_z == null) ){
+		return;
+	}
+	
+	v_x.setText(""+x);
+	v_y.setText(""+y);
+	v_z.setText(""+z);
+}
+	
+
+	@Override
+	protected void onResume() {
+	  super.onResume();
+	  mSensorManager.registerListener(this,mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+	  SensorManager.SENSOR_DELAY_NORMAL);
+	}
+	
+	@Override
+	protected void onPause() {
+	  super.onPause();
+	  mSensorManager.unregisterListener(this);
+	}
+
+	
+//
+//	/**
+//	 * A dummy fragment representing a section of the app, but that simply
+//	 * displays dummy text.
+//	 */
+//	public static class DummySectionFragment extends Fragment {
+//		/**
+//		 * The fragment argument representing the section number for this
+//		 * fragment.
+//		 */
+//		public static final String ARG_SECTION_NUMBER = "section_number";
+//
+//		public DummySectionFragment() {
+//		}
+//
+//		@Override
+//		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//				Bundle savedInstanceState) {
+//			// Create a new TextView and set its text to the fragment's section
+//			// number argument value.
+//			TextView textView = new TextView(getActivity());
+//			textView.setGravity(Gravity.CENTER);
+//			textView.setText(Integer.toString(getArguments().getInt(
+//					ARG_SECTION_NUMBER)));
+//			return textView;
+//		}
+//	}
+//	
 	 
 
 }

@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-public class AccelerometerFragment extends Fragment{
+public class ProximityFragment extends Fragment{
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -20,7 +20,7 @@ public class AccelerometerFragment extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
-		return LayoutInflater.from(getActivity().getApplicationContext()).inflate(R.layout.accelerometerfragmentlayout, null);	
+		return LayoutInflater.from(getActivity().getApplicationContext()).inflate(R.layout.proximityfragmentlayout, null);	
 	}
 
 }
