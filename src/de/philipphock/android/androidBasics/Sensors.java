@@ -26,7 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class Sensors extends FragmentActivity implements ActionBar.TabListener,SensorEventListener {
+public class Sensors extends FragmentActivity implements ActionBar.TabListener{
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -38,7 +38,7 @@ public class Sensors extends FragmentActivity implements ActionBar.TabListener,S
 	 */
 	SectionsPagerAdapter mSectionsPagerAdapter;
 
-	private SensorManager mSensorManager;
+	
 	
 	public static final int NUM_SENSORS= 5;
 	public static final int ACCELEROMETER = 0;
@@ -90,7 +90,7 @@ public class Sensors extends FragmentActivity implements ActionBar.TabListener,S
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
-		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+		
 	}
 
 	@Override
@@ -174,58 +174,6 @@ public class Sensors extends FragmentActivity implements ActionBar.TabListener,S
 		}
 	}
 
-	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		
-		
-	}
-
-	@Override
-	public void onSensorChanged(SensorEvent event) {
-		
-		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-		      accelerometer(event);
-		}
-		
-		
-	}
-	
-	
-private void accelerometer(SensorEvent event) {
-	float[] values = event.values;
-	
-	float x = values[0];
-	float y = values[1];
-	float z = values[2];
-	
-	TextView v_x = (TextView)findViewById(R.id.accel_val_x);
-	TextView v_y = (TextView)findViewById(R.id.accel_val_y);
-	TextView v_z = (TextView)findViewById(R.id.accel_val_z);
-	
-	if (	(v_x == null) ||
-			(v_y == null) ||
-			(v_z == null) ){
-		return;
-	}
-	
-	v_x.setText(""+x);
-	v_y.setText(""+y);
-	v_z.setText(""+z);
-}
-	
-
-	@Override
-	protected void onResume() {
-	  super.onResume();
-	  mSensorManager.registerListener(this,mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-	  SensorManager.SENSOR_DELAY_NORMAL);
-	}
-	
-	@Override
-	protected void onPause() {
-	  super.onPause();
-	  mSensorManager.unregisterListener(this);
-	}
 
 	
 //
