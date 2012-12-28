@@ -3,14 +3,19 @@
     package="de.philipphock.android.androidBasics"
     android:versionCode="1"
     android:versionName="1.0" >
-
+    
+	
+	
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="15" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-feature android:name="android.hardware.sensor.accelerometer" />
+    <uses-feature android:name="android.hardware.touchscreen.multitouch" />
     
-    <uses-feature android:name="android.hardware.sensor.accelerometer"/>
 
     <application
         android:allowBackup="true"
@@ -29,6 +34,10 @@
         <activity
             android:name="de.philipphock.android.androidBasics.Sensors"
             android:label="@string/title_activity_sensors" >
+        </activity>
+        <activity
+            android:name="de.philipphock.android.androidBasics.TouchBlob"
+            android:label="@string/title_activity_touch_blob" >
         </activity>
     </application>
 

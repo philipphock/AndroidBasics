@@ -39,6 +39,10 @@ public class Navigation extends Activity{
 				startActivity(new Intent(this,Sensors.class));		
 			break;
 			
+			case R.id.touch:
+				startActivity(new Intent(this,TouchBlob.class));		
+			break;
+
 		}
 		
 		
