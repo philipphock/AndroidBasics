@@ -28,7 +28,7 @@ public class BlobView extends SurfaceView implements SurfaceHolder.Callback, OnT
 	static{
 		blobPaint.setStyle(Paint.Style.FILL);
 		blobPaint.setStrokeWidth(1);
-		blobPaint.setColor(Color.WHITE);
+		blobPaint.setColor(Color.RED);
 		
 		eraserPaint.setStyle(Paint.Style.FILL);
 		eraserPaint.setColor(Color.BLACK);
@@ -67,10 +67,10 @@ public class BlobView extends SurfaceView implements SurfaceHolder.Callback, OnT
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		//synchronized (activePointers) {
+
 		int actionPointerIndex = (event.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
                 
-		Log.d("touch",""+event.toString());
+		
 			for (int ptr=0;ptr<event.getPointerCount();ptr++){
 				
 				int ptrID = event.getPointerId(ptr);
@@ -78,7 +78,7 @@ public class BlobView extends SurfaceView implements SurfaceHolder.Callback, OnT
 				switch (event.getAction() & MotionEvent.ACTION_MASK){
 				
 					case MotionEvent.ACTION_POINTER_DOWN:
-						Log.d("except",actionPointerIndex+"");
+						
 						ptrID = event.getPointerId(actionPointerIndex);
 						
 					case MotionEvent.ACTION_DOWN:
@@ -108,15 +108,13 @@ public class BlobView extends SurfaceView implements SurfaceHolder.Callback, OnT
 	
 				
 			}
-			//Log.d("touch",event.toString());
 			
-					//}
 		return true;
 	}
 
 	@Override
 	public void run() {
-		Log.d("thread","starting loop");
+		
 		while(running){
 			if (getHolder().getSurface().isValid()){
 				Canvas canvas = getHolder().lockCanvas();
@@ -139,7 +137,7 @@ public class BlobView extends SurfaceView implements SurfaceHolder.Callback, OnT
 				getHolder().unlockCanvasAndPost(canvas);
 			}
 		}
-		Log.d("thread","stopping loop");
+		
 	}
 
 }

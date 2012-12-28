@@ -11,5 +11,6 @@
     <string name="sensor_section4_gyr">Gyroscope</string>
     <string name="title_activity_sensors">Sensors</string>
     <string name="title_activity_touch_blob">TouchBlob</string>
+    <string name="title_activity_location">Location</string>
 
 </resources>
