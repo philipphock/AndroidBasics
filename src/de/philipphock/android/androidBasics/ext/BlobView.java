@@ -67,30 +67,50 @@ public class BlobView extends SurfaceView implements SurfaceHolder.Callback, OnT
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		synchronized (activePointers) {
-			
-		
-			Log.d("touch", event.toString());
-			switch (event.getAction()){
-				case MotionEvent.ACTION_DOWN:
-					activePointers.put(0, new Point((int) event.getX(),(int)event.getY()));
-				break;
+		//synchronized (activePointers) {
+		int actionPointerIndex = (event.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+                
+		Log.d("touch",""+event.toString());
+			for (int ptr=0;ptr<event.getPointerCount();ptr++){
 				
-				case MotionEvent.ACTION_UP:
-					activePointers.removeAt(0);
-				break;
+				int ptrID = event.getPointerId(ptr);
 				
-				case MotionEvent.ACTION_MOVE:
-					Point p = activePointers.get(0);
-					if (p==null)break;
-					p.x=(int)event.getX();
-					p.y=(int)event.getY();
+				switch (event.getAction() & MotionEvent.ACTION_MASK){
+				
+					case MotionEvent.ACTION_POINTER_DOWN:
+						Log.d("except",actionPointerIndex+"");
+						ptrID = event.getPointerId(actionPointerIndex);
+						
+					case MotionEvent.ACTION_DOWN:
+						activePointers.put(ptrID, new Point((int) event.getX(ptr),(int)event.getY(ptr)));
+					break;
+					
+					case MotionEvent.ACTION_POINTER_UP:
+						ptrID = event.getPointerId(actionPointerIndex);
+					case MotionEvent.ACTION_UP:
+						activePointers.removeAt(ptrID );
+					break;
+					
+					case MotionEvent.ACTION_MOVE:
+						Point p = activePointers.get(ptrID);
+						if (p==null)break;
+						
+						p.x=(int)event.getX(ptr);
+						p.y=(int)event.getY(ptr);
+						
+						
+					break;
 					
 					
-				break;
+						
 				
 			}
-		}
+	
+				
+			}
+			//Log.d("touch",event.toString());
+			
+					//}
 		return true;
 	}
 
@@ -103,13 +123,18 @@ public class BlobView extends SurfaceView implements SurfaceHolder.Callback, OnT
 				if (canvas == null){
 					running=false;
 					break;
-				}
-				//canvas.drawRect(0,0,10,10,blobPaint);
+				} 
 				canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), eraserPaint);
-				Point p = activePointers.get(0);
-				if (p!=null){
+				int size = activePointers.size();
+				for (int i=0;i<size;i++){
+					Point p = activePointers.get(i);
+					if (p==null){
+						break;
+					}
 					canvas.drawOval(new RectF(p.x-RADX,p.y-RADY,p.x+RADX,p.y+RADY),blobPaint);
+					
 				}
+				
 				
 				getHolder().unlockCanvasAndPost(canvas);
 			}
